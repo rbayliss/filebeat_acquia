@@ -41,3 +41,4 @@ workflows:
       - release:
           image: rbayliss/filebeat-acquia
           tag: latest
+          context: org-global
