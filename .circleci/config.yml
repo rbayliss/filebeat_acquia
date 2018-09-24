@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: node:9
+      - image: circleci/node:10-stretch
       - image: docker.elastic.co/elasticsearch/elasticsearch:6.3.1
     steps:
       - checkout
@@ -15,10 +15,10 @@ jobs:
           paths:
             - module/node_modules
             - module/package-lock.json
-      - run: cd module && npm run test
+      - run: cd module && dockerize -wait tcp://localhost:9200 npm run test
   release:
     docker:
-      - image: circleci/golang:1-stretch-node
+      - image: circleci/node:10-stretch
     steps:
       - checkout
       - run: docker build .
