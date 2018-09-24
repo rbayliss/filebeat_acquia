@@ -8,10 +8,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: npm-cache-{{ checksum "module/package.json" }}
+          key: npm-caches-{{ checksum "module/package.json" }}
       - run: cd module && npm install
       - save_cache:
-          key: npm-cache-{{ checksum "module/package.json" }}
+          key: npm-caches-{{ checksum "module/package.json" }}
           paths:
             - module/node_modules
             - module/package-lock.json
