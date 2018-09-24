@@ -16,8 +16,15 @@ jobs:
             - module/node_modules
             - module/package-lock.json
       - run: cd module && npm run test
+  release:
+    docker:
+      - image: circleci/golang:1-stretch-node
+    steps:
+      - checkout
+      - run: docker build .
 
 workflows:
   test:
     jobs:
       - test
+      - release
