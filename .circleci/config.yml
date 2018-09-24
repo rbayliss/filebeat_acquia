@@ -16,3 +16,8 @@ jobs:
             - module/node_modules
             - module/package-lock.json
       - run: cd module && npm run test
+
+workflows:
+  test:
+    jobs:
+      - test
