@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`It parses a basic accesslog 1`] = `
+Object {
+  "@timestamp": "2018-08-02T06:25:04.000Z",
+  "ac_host": "example.com",
+  "agent": "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)",
+  "auth": "-",
+  "bytes": 123,
+  "clientip": "127.0.0.1",
+  "forwarded_for": Array [
+    "127.0.0.2",
+    "127.0.0.3",
+  ],
+  "hosting_site": "example",
+  "httpversion": "1.1",
+  "ident": "-",
+  "pid": 123,
+  "referrer": "/foo/referrer",
+  "request": "/foo",
+  "request_id": "v-c99d7b12-961c-11e8-b2a9-0e6757d6ca58",
+  "request_time": 123,
+  "response": 200,
+  "verb": "GET",
+  "vhost": "example.prod.acquia-sites.com",
+}
+`;
+
+exports[`It parses an accesslog with no IP, no referer, and no bytes 1`] = `
+Object {
+  "@timestamp": "2018-08-02T06:25:04.000Z",
+  "ac_host": "example.com",
+  "agent": "Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)",
+  "auth": "-",
+  "clientip": "-",
+  "forwarded_for": Array [
+    "127.0.0.2",
+    "127.0.0.3",
+  ],
+  "hosting_site": "example",
+  "httpversion": "1.1",
+  "ident": "-",
+  "pid": 123,
+  "referrer": "-",
+  "request": "/foo",
+  "request_id": "v-c99d7b12-961c-11e8-b2a9-0e6757d6ca58",
+  "request_time": 123,
+  "response": 200,
+  "verb": "GET",
+  "vhost": "example.prod.acquia-sites.com",
+}
+`;

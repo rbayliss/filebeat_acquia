@@ -1,0 +1,9 @@
+module_version: "1.0"
+
+var:
+  - name: paths
+    default:
+      - /mnt/log/*/php-errors.log*
+
+ingest_pipeline: ingest/pipeline.json
+input: config/php_error.yml

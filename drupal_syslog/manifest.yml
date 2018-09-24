@@ -1,0 +1,9 @@
+module_version: "1.0"
+
+var:
+  - name: paths
+    default:
+      - /mnt/log/*/drupal-watchdog.log*
+
+ingest_pipeline: ingest/pipeline.json
+input: config/drupal_syslog.yml

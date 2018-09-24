@@ -1,0 +1,89 @@
+{
+  "description": "Acquia Apache Accesslogs",
+  "processors":  [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          "%{AC_HTTPD_COMBINEDLOG}%{GREEDYDATA:metadata}"
+        ],
+        "pattern_definitions": {
+          "OPTIONAL_IPORHOST": "%{IPORHOST}|\\-",
+          "AC_HTTPD_COMMONLOG": "%{OPTIONAL_IPORHOST:clientip} %{HTTPDUSER:ident} %{USER:auth} \\[%{HTTPDATE:timestamp}\\] \"(?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest})\" %{NUMBER:response} (?:%{NUMBER:bytes}|-)",
+          "AC_HTTPD_COMBINEDLOG": "%{AC_HTTPD_COMMONLOG} %{QS:referrer} %{QS:agent}"
+        }
+      }
+    },
+    {
+      "grok": {
+        "field": "metadata",
+        "patterns": [
+          "vhost=%{NOTSPACE:vhost} host=%{NOTSPACE:ac_host} hosting_site=%{NOTSPACE:hosting_site} pid=%{POSINT:pid} request_time=%{POSINT:request_time} forwarded_for=\"%{DATA:forwarded_for}\" request_id=\"%{DATA:request_id}\""
+        ]
+      }
+    },
+    {
+      "date": {
+        "field": "timestamp",
+        "formats": ["dd/MMM/yyyy:HH:mm:ss Z"]
+      }
+    },
+    {
+      "gsub": {
+        "field": "referrer",
+        "pattern": "\\\"",
+        "replacement": ""
+      }
+    },
+    {
+      "gsub": {
+        "field": "agent",
+        "pattern": "\\\"",
+        "replacement": ""
+      }
+    },
+    {
+      "split": {
+        "field": "forwarded_for",
+        "target_field": "forwarded_for",
+        "separator": ", "
+      }
+    },
+    {
+      "convert": {
+        "field": "bytes",
+        "type": "integer",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "response",
+        "type": "integer"
+      }
+    },
+    {
+      "convert": {
+        "field": "pid",
+        "type": "integer"
+      }
+    },
+    {
+      "convert": {
+        "field": "request_time",
+        "type": "integer"
+      }
+    },
+    {
+      "remove": {
+        "field": ["message", "metadata", "timestamp"]
+      }
+    }
+  ],
+  "on_failure" : [{
+    "set" : {
+      "field" : "error.message",
+      "value" : "{{ _ingest.on_failure_message }}"
+    }
+  }]
+}

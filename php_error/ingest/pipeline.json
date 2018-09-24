@@ -1,0 +1,36 @@
+{
+  "description": "Acquia Apache PHP Errors",
+  "processors":  [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          "\\[%{AC_HTTP_DATE:timestamp} %{NOTSPACE:timezone}\\] %{GREEDYDATA:log_message} request_id=\"%{DATA:request_id}\"",
+          "\\[%{AC_HTTP_DATE:timestamp} %{NOTSPACE:timezone}\\] %{GREEDYDATA:log_message}"
+        ],
+        "pattern_definitions": {
+          "AC_HTTP_DATE": "%{MONTHDAY}-%{MONTH}-%{YEAR} %{TIME}",
+          "GREEDYMULTILINE" : "(.|\n)*"
+        }
+      }
+    },
+    {
+      "date": {
+        "field": "timestamp",
+        "formats": ["dd-MMM-yyyy HH:mm:ss"],
+        "timezone": "{{timezone}}"
+      }
+    },
+    {
+      "remove": {
+        "field": ["timestamp", "timezone", "message"]
+      }
+    }
+  ],
+  "on_failure" : [{
+    "set" : {
+      "field" : "error.message",
+      "value" : "{{ _ingest.on_failure_message }}"
+    }
+  }]
+}

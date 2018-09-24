@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`It parses a PHP fatal error in the syslog 1`] = `
+Object {
+  "@timestamp": "2018-08-04T06:25:15.000Z",
+  "log_message": "Foo the bar in the baz.",
+  "logsource": "127.0.0.1",
+  "pid": 1234,
+  "program": "example",
+  "request_id": "v-262cbe4a-97af-11e8-9226-0e6757d6ca58",
+}
+`;
+
+exports[`It parses a standard drupal syslog message" 1`] = `
+Object {
+  "@timestamp": "2018-08-04T06:25:15.000Z",
+  "channel": "page not found",
+  "client_ip": "127.0.0.1",
+  "link": "",
+  "log_message": "/foo/bar",
+  "logsource": "127.0.0.1",
+  "pid": 1234,
+  "program": "example",
+  "referrer": "https://example.com/bar/foo",
+  "request": "https://example.com/foo/bar",
+  "request_id": "v-262cbe4a-97af-11e8-9226-0e6757d6ca58",
+  "uid": 0,
+  "web_host": "https://example.com",
+}
+`;

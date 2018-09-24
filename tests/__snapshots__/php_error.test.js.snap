@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`It parses a standard error message 1`] = `
+Object {
+  "@timestamp": "2018-08-02T06:25:04.000-04:00",
+  "log_message": "Uncaught PHP Exception Drupal\\\\Core\\\\Database\\\\InvalidQueryException: \\"Query condition 'node_field_data.nid IN ()' cannot be empty.\\" at /mnt/www/html/example/docroot/core/lib/Drupal/Core/Database/Query/Condition.php line 103",
+  "request_id": "v-033f1b7a-95a8-11e8-bc0a-0e6757d6ca58",
+}
+`;

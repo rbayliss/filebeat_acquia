@@ -1,0 +1,73 @@
+{
+  "description": "Mass.gov Drupal Syslog",
+  "processors":  [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          "^%{SYSLOGBASE2} %{GREEDYDATA:log_message}$"
+        ]
+      }
+    },
+    {
+      "grok": {
+        "field": "log_message",
+        "patterns": [
+          "^%{URI:web_host}\\|%{POSINT:unix_timestamp}\\|%{DATA:channel}\\|%{IP:client_ip}\\|%{DATA:request}\\|%{DATA:referrer}\\|%{NONNEGINT:uid}\\|%{DATA:link}\\|%{GREEDYDATA:log_message}$"
+        ],
+        "ignore_failure": true
+      }
+    },
+    {
+      "grok": {
+        "field": "log_message",
+        "patterns": [
+          "^%{GREEDYDATA:log_message} request_id=\"%{DATA:request_id}\"$"
+        ],
+        "ignore_failure": true
+      }
+    },
+    {
+      "date": {
+        "field": "unix_timestamp",
+        "formats": ["UNIX"],
+        "on_failure": [{
+          "date": {
+            "field": "timestamp",
+            "formats": ["MMM  dd HH:mm:ss"]
+          }
+        }]
+      }
+    },
+    {
+      "convert": {
+        "field": "uid",
+        "type": "integer",
+        "ignore_missing": true
+      }
+    },
+    {
+      "convert": {
+        "field": "pid",
+        "type": "integer"
+      }
+    },
+    {
+      "remove": {
+        "field": ["timestamp", "message"]
+      }
+    },
+    {
+      "remove": {
+        "field": ["unix_timestamp"],
+        "ignore_failure": true
+      }
+    }
+  ],
+  "on_failure" : [{
+    "set" : {
+      "field" : "error.message",
+      "value" : "{{ _ingest.on_failure_message }}"
+    }
+  }]
+}
