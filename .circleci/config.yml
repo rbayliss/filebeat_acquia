@@ -17,15 +17,27 @@ jobs:
             - module/package-lock.json
       - run: cd module && dockerize -wait tcp://localhost:9200 npm run test
   release:
+    parameters:
+      image:
+        type: string
+        description: The name of the docker image to push to.
+      tag:
+        type: string
+        default: latest
+        description: The docker tag to use
     docker:
       - image: circleci/node:10-stretch
     steps:
       - checkout
       - setup_remote_docker
-      - run: docker build .
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: docker build . -t "<< parameters.image >>:<< parameters.tag >>"
+      - run: docker push "<< parameters.image >>:<< parameters.tag >>"
 
 workflows:
   test:
     jobs:
       - test
-      - release
+      - release:
+          image: rbayliss/filebeat-acquia
+          tag: latest
