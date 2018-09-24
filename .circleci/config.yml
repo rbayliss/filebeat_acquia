@@ -21,6 +21,7 @@ jobs:
       - image: circleci/node:10-stretch
     steps:
       - checkout
+      - setup_remote_docker
       - run: docker build .
 
 workflows:
