@@ -35,12 +35,13 @@ jobs:
       - run: docker push "<< parameters.image >>:<< parameters.tag >>"
 
 workflows:
-  test_release:
+  test_release_latest:
     jobs:
       - test
       - release:
           image: rbayliss/filebeat-acquia
           tag: latest
+          name: release_latest
           context: org-global
           requires: [test]
           filters:
@@ -51,6 +52,7 @@ workflows:
       - release:
           image: rbayliss/filebeat-acquia
           tag: $CIRCLE_TAG
+          name: release_tag
           context: org-global
           filters:
             tags: {only: /.*/}
