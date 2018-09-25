@@ -1,0 +1,14 @@
+filebeat.config:
+  prospectors:
+    path: ${path.config}/prospectors.d/*.yml
+    reload.enabled: false
+  modules:
+    path: ${path.config}/modules.d/*.yml
+    reload.enabled: false
+
+filebeat.modules:
+  - module: acquia
+
+
+output.elasticsearch:
+  hosts: ["${ELASTICSEARCH}"]

@@ -22,5 +22,5 @@ Installation
 2. Make sure the module is loaded by adding the following to `filebeat.yml`:
     ```yaml
     filebeat.modules:
-      - module: massgov
+      - module: acquia
     ```

@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  filebeat:
+    build: ./filebeat
+    environment:
+      ELASTICSEARCH:
+    volumes:
+      - $LOG_DATA:/mnt/log
+
+  sync:
+    build: ./sync
+    environment:
+      AC_SITE:
+      AC_ENVIRONMENT:
+      AC_API_USER:
+      AC_API_TOKEN:
+      LOG_DIR: /mnt/log
+    volumes:
+      - $LOG_DATA:/mnt/log
+    secrets:
+      - source: acquia_private_key
+        uid: '8'
+        mode: 0440
+
+secrets:
+  acquia_private_key:
+    file: $PRIVATE_KEY_PATH
+
+
+

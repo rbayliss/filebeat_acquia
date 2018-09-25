@@ -8,14 +8,14 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: npm-caches-{{ checksum "module/package.json" }}
-      - run: cd module && npm install
+          key: npm-caches-{{ checksum "filebeat/module/package.json" }}
+      - run: cd filebeat/module && npm install
       - save_cache:
-          key: npm-caches-{{ checksum "module/package.json" }}
+          key: npm-caches-{{ checksum "filebeat/module/package.json" }}
           paths:
-            - module/node_modules
-            - module/package-lock.json
-      - run: cd module && dockerize -wait tcp://localhost:9200 npm run test
+            - filebeat/module/node_modules
+            - filebeat/module/package-lock.json
+      - run: cd filebeat/module && dockerize -wait tcp://localhost:9200 npm run test
   release:
     parameters:
       image:
@@ -31,7 +31,7 @@ jobs:
       - checkout
       - setup_remote_docker
       - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run: docker build . -t "<< parameters.image >>:<< parameters.tag >>"
+      - run: cd filebeat && docker build . -t "<< parameters.image >>:<< parameters.tag >>"
       - run: docker push "<< parameters.image >>:<< parameters.tag >>"
 
 workflows:

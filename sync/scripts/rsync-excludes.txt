@@ -1,0 +1,4 @@
+newrelic_php_agent.log
+ma-optimized-backup_*
+drush-cron-watching-flagging.log
+optimized-daily-backup.log
