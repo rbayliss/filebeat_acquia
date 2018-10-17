@@ -21,6 +21,9 @@ jobs:
       filebeat_image:
         type: string
         description: The name of the docker image to push to.
+      sync_image:
+        type: string
+        description: The name of the docker image to push to.
       tag:
         type: string
         default: latest
@@ -42,7 +45,8 @@ workflows:
     jobs:
       - test
       - release:
-          image: rbayliss/filebeat-acquia
+          filebeat_image: rbayliss/filebeat-acquia
+          sync_image: rbayliss/filebeat-acquia-sync
           tag: latest
           name: release_latest
           context: org-global
