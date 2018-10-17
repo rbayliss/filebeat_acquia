@@ -18,7 +18,7 @@ jobs:
       - run: cd filebeat/module && dockerize -wait tcp://localhost:9200 npm run test
   release:
     parameters:
-      image:
+      filebeat_image:
         type: string
         description: The name of the docker image to push to.
       tag:
@@ -31,8 +31,11 @@ jobs:
       - checkout
       - setup_remote_docker
       - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run: cd filebeat && docker build . -t "<< parameters.image >>:<< parameters.tag >>"
-      - run: docker push "<< parameters.image >>:<< parameters.tag >>"
+      - run: cd filebeat && docker build . -t "<< parameters.filebeat_image >>:<< parameters.tag >>"
+      - run: docker push "<< parameters.filebeat_image >>:<< parameters.tag >>"
+      - run: cd sync && docker build . -t "<< parameters.sync_image >>:<< parameters.tag >>"
+      - run: docker push "<< parameters.sync_image >>:<< parameters.tag >>"
+      
 
 workflows:
   test_release_latest:
@@ -50,7 +53,8 @@ workflows:
   release:
     jobs:
       - release:
-          image: rbayliss/filebeat-acquia
+          filebeat_image: rbayliss/filebeat-acquia
+          sync_image: rbayliss/filebeat-acquia-sync
           tag: $CIRCLE_TAG
           name: release_tag
           context: org-global
